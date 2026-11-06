@@ -5,528 +5,811 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Customer Card</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap');
 
-  :root{
-    --bg:#F6F4F1; --surface:#FFFFFF; --ink:#2B2320; --ink-soft:#6B6058;
-    --line:#E6E0D8; --accent:#B85C7A; --accent-ink:#7C3A50; --accent-soft:#F3E3E8;
-    --ok:#6E8A6A; --ok-soft:#EAF1E7; --warn:#B4632F; --warn-soft:#FBEAE0;
-  }
-  *{box-sizing:border-box;}
-  body{margin:0;font-family:'Noto Sans JP',-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;padding:20px 14px 60px;}
-  .wrap{max-width:680px;margin:0 auto;}
-  header{margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
-  .eyebrow{font-family:'Zen Kaku Gothic New',sans-serif;font-size:12px;font-weight:700;color:var(--accent-ink);margin:0 0 4px;}
-  h1{font-family:'Zen Kaku Gothic New',sans-serif;font-size:21px;font-weight:700;margin:0;}
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px;}
-  .card h2{font-size:15px;font-weight:700;margin:0 0 12px;font-family:'Zen Kaku Gothic New',sans-serif;}
+:root{
+--bg:#F6F4F1; --surface:#FFFFFF; --ink:#2B2320; --ink-soft:#6B6058;
+--line:#E6E0D8; --accent:#B85C7A; --accent-ink:#7C3A50; --accent-soft:#F3E3E8;
+--ok:#6E8A6A; --ok-soft:#EAF1E7; --warn:#B4632F; --warn-soft:#FBEAE0;
+--danger:#B23A3A;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Noto Sans JP',-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;padding:20px 14px 60px;}
+.wrap{max-width:680px;margin:0 auto;}
+header{margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.eyebrow{font-family:'Zen Kaku Gothic New',sans-serif;font-size:12px;font-weight:700;color:var(--accent-ink);margin:0 0 4px;}
+h1{font-family:'Zen Kaku Gothic New',sans-serif;font-size:21px;font-weight:700;margin:0;}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px;}
+.card h2{font-size:15px;font-weight:700;margin:0 0 12px;font-family:'Zen Kaku Gothic New',sans-serif;}
 
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:14.5px;font-weight:600;font-family:'Noto Sans JP',sans-serif;cursor:pointer;}
-  .btn:active{background:var(--accent-ink);}
-  .btn.secondary{background:var(--surface);color:var(--accent-ink);border:1.5px solid var(--accent);}
-  .btn.small{padding:8px 12px;font-size:13px;}
-  .btn.full{width:100%;}
-  .btn.icon{width:40px;height:40px;padding:0;border-radius:50%;flex:0 0 auto;}
-  .btn.ghost{background:none;color:var(--ink-soft);border:1px solid var(--line);}
-  .btn:disabled{opacity:.4;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:14.5px;font-weight:600;font-family:'Noto Sans JP',sans-serif;cursor:pointer;}
+.btn:active{background:var(--accent-ink);}
+.btn.secondary{background:var(--surface);color:var(--accent-ink);border:1.5px solid var(--accent);}
+.btn.small{padding:8px 12px;font-size:13px;}
+.btn.full{width:100%;}
+.btn.icon{width:40px;height:40px;padding:0;border-radius:50%;flex:0 0 auto;}
+.btn.ghost{background:none;color:var(--ink-soft);border:1px solid var(--line);}
+.btn.danger{background:var(--danger);color:#fff;}
+.btn.danger:active{background:#8c2b2b;}
+.btn.dangerOutline{background:var(--surface);color:var(--danger);border:1.5px solid var(--danger);}
+.btn:disabled{opacity:.4;}
 
-  input,textarea,select{
-    width:100%;font-family:'Noto Sans JP',sans-serif;font-size:15px;padding:10px 12px;
-    border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);
-  }
-  label.field{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:12px;}
-  label.field span{display:block;margin-bottom:5px;}
-  textarea{min-height:90px;resize:vertical;}
+/* iOSで入力時に画面が勝手に拡大されないよう16pxにする */
+input,textarea,select{
+width:100%;font-family:'Noto Sans JP',sans-serif;font-size:16px;padding:10px 12px;
+border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);
+}
+label.field{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:12px;}
+label.field span{display:block;margin-bottom:5px;}
+textarea{min-height:90px;resize:vertical;}
 
-  .indexRow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
-  .indexRow button{
-    border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);
-    border-radius:8px;padding:6px 10px;font-size:13px;font-family:'Noto Sans JP',sans-serif;cursor:pointer;
-  }
-  .indexRow button.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.indexRow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.indexRow button{
+border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);
+border-radius:8px;padding:6px 10px;font-size:13px;font-family:'Noto Sans JP',sans-serif;cursor:pointer;
+}
+.indexRow button.active{background:var(--accent);color:#fff;border-color:var(--accent);}
 
-  .searchBar{display:flex;gap:8px;margin-bottom:14px;}
+.searchBar{display:flex;gap:8px;margin-bottom:14px;}
 
-  .customerList{list-style:none;margin:0;padding:0;}
-  .customerList li{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:14px 4px;border-bottom:1px solid var(--line);cursor:pointer;
-  }
-  .customerList li:last-child{border-bottom:none;}
-  .customerList .name{font-weight:600;font-size:15px;}
-  .customerList .kana{font-size:12px;color:var(--ink-soft);}
-  .customerList .rank{font-size:11.5px;background:var(--accent-soft);color:var(--accent-ink);padding:3px 9px;border-radius:999px;}
-  .customerList .cnt{font-size:11.5px;color:var(--ink-soft);margin-left:8px;}
-  .empty{color:var(--ink-soft);font-size:13.5px;text-align:center;padding:30px 10px;}
+.customerList{list-style:none;margin:0;padding:0;}
+.customerList li{
+display:flex;align-items:center;justify-content:space-between;
+padding:14px 4px;border-bottom:1px solid var(--line);cursor:pointer;
+}
+.customerList li:last-child{border-bottom:none;}
+.customerList .name{font-weight:600;font-size:15px;}
+.customerList .kana{font-size:12px;color:var(--ink-soft);}
+.customerList .rank{font-size:11.5px;background:var(--accent-soft);color:var(--accent-ink);padding:3px 9px;border-radius:999px;}
+.customerList .cnt{font-size:11.5px;color:var(--ink-soft);margin-left:8px;}
+.empty{color:var(--ink-soft);font-size:13.5px;text-align:center;padding:30px 10px;}
 
-  .backRow{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-  .backRow button{background:none;border:none;color:var(--accent-ink);font-size:14px;font-weight:600;cursor:pointer;padding:6px 0;}
+.backRow{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.backRow button{background:none;border:none;color:var(--accent-ink);font-size:14px;font-weight:600;cursor:pointer;padding:6px 0;}
 
-  .profileHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
-  .profileName{font-family:'Zen Kaku Gothic New',sans-serif;font-size:22px;font-weight:700;}
-  .profileKana{font-size:12.5px;color:var(--ink-soft);margin-bottom:8px;}
-  .profileRank{display:inline-block;font-size:12px;background:var(--accent-soft);color:var(--accent-ink);padding:4px 12px;border-radius:999px;margin-top:4px;}
+.profileHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.profileName{font-family:'Zen Kaku Gothic New',sans-serif;font-size:22px;font-weight:700;}
+.profileKana{font-size:12.5px;color:var(--ink-soft);margin-bottom:8px;}
+.profileRank{display:inline-block;font-size:12px;background:var(--accent-soft);color:var(--accent-ink);padding:4px 12px;border-radius:999px;margin-top:4px;}
 
-  .visitCard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;}
-  .visitDate{font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:14.5px;margin-bottom:10px;}
-  .photoRow{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:2px;}
-  .photoRow img{width:96px;height:96px;object-fit:cover;border-radius:10px;border:1px solid var(--line);flex:0 0 auto;}
-  .visitField{font-size:13.5px;margin-bottom:6px;}
-  .visitField b{font-weight:600;color:var(--ink-soft);display:block;font-size:11.5px;margin-bottom:2px;}
-  .visitActions{display:flex;gap:8px;margin-top:10px;}
+.visitCard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;}
+.visitDate{font-family:'Zen Kaku Gothic New',sans-serif;font-weight:700;font-size:14.5px;margin-bottom:10px;}
+.photoRow{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:2px;}
+.photoRow img{width:96px;height:96px;object-fit:cover;border-radius:10px;border:1px solid var(--line);flex:0 0 auto;}
+.visitField{font-size:13.5px;margin-bottom:6px;}
+.visitField b{font-weight:600;color:var(--ink-soft);display:block;font-size:11.5px;margin-bottom:2px;}
+.visitActions{display:flex;gap:8px;margin-top:10px;}
 
-  .photoPicker{border:1.5px dashed var(--line);border-radius:12px;padding:20px;text-align:center;cursor:pointer;margin-bottom:14px;}
-  .photoPicker input{display:none;}
-  .photoPreview{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
-  .photoPreview .ph{position:relative;}
-  .photoPreview img{width:80px;height:80px;object-fit:cover;border-radius:10px;border:1px solid var(--line);}
-  .photoPreview .rm{position:absolute;top:-6px;right:-6px;background:var(--warn);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;}
+.photoPicker{border:1.5px dashed var(--line);border-radius:12px;padding:20px;text-align:center;cursor:pointer;margin-bottom:14px;}
+.photoPicker input{display:none;}
+.photoPreview{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.photoPreview .ph{position:relative;}
+.photoPreview img{width:80px;height:80px;object-fit:cover;border-radius:10px;border:1px solid var(--line);}
+.photoPreview .rm{position:absolute;top:-6px;right:-6px;background:var(--warn);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;}
 
-  .memoWrap{position:relative;}
-  .micBtn{
-    position:absolute;right:8px;bottom:8px;width:34px;height:34px;border-radius:50%;
-    background:var(--accent-soft);color:var(--accent-ink);border:none;font-size:16px;cursor:pointer;
-  }
-  .micBtn.listening{background:var(--warn);color:#fff;}
-  .hint{font-size:11.5px;color:var(--ink-soft);margin-top:4px;}
+.memoWrap{position:relative;}
+.micBtn{
+position:absolute;right:8px;bottom:8px;width:34px;height:34px;border-radius:50%;
+background:var(--accent-soft);color:var(--accent-ink);border:none;font-size:16px;cursor:pointer;
+}
+.micBtn.listening{background:var(--warn);color:#fff;}
+.hint{font-size:11.5px;color:var(--ink-soft);margin-top:4px;}
 
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .msg{border-radius:10px;padding:12px 14px;font-size:13.5px;margin-bottom:14px;}
-  .msg.warn{background:var(--warn-soft);color:var(--warn);}
-  .msg.ok{background:var(--ok-soft);color:var(--ok);}
-  .hidden{display:none !important;}
-  footer{text-align:center;font-size:11.5px;color:var(--ink-soft);margin-top:20px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.msg{border-radius:10px;padding:12px 14px;font-size:13.5px;margin-bottom:14px;}
+.msg.warn{background:var(--warn-soft);color:var(--warn);}
+.msg.ok{background:var(--ok-soft);color:var(--ok);}
+.hidden{display:none !important;}
+footer{text-align:center;font-size:11.5px;color:var(--ink-soft);margin-top:20px;}
 
-  .fab{position:fixed;right:20px;bottom:24px;z-index:10;}
-  .fab .btn{box-shadow:0 6px 18px rgba(0,0,0,.18);}
+.fab{position:fixed;right:20px;bottom:24px;z-index:10;}
+.fab .btn{box-shadow:0 6px 18px rgba(0,0,0,.18);}
+
+.dangerZone{margin-top:36px;padding-top:18px;border-top:1px dashed var(--line);text-align:center;}
+
+/* 確認ダイアログ */
+.modalBack{position:fixed;inset:0;background:rgba(43,35,32,.55);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modalBox{background:var(--surface);border-radius:16px;padding:22px 20px;max-width:420px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,.25);}
+.modalBox h2{font-family:'Zen Kaku Gothic New',sans-serif;font-size:17px;margin:0 0 10px;}
+.modalBox p{font-size:13.5px;color:var(--ink);margin:0 0 16px;white-space:pre-line;}
+.modalBox .extra{margin-bottom:12px;}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <header>
-    <div>
-      <p class="eyebrow">ネイルサロン</p>
-      <h1 id="pageTitle">Customer Card</h1>
-    </div>
-    <button class="btn small ghost" id="dataMenuBtn">データ</button>
-  </header>
+<header>
+<div>
+<p class="eyebrow">ネイルサロン</p>
+<h1 id="pageTitle">Customer Card</h1>
+</div>
+<button class="btn small ghost" id="dataMenuBtn">データ</button>
+</header>
 
-  <div id="dataMenu" class="card hidden">
-    <h2>データの保存・読み込み</h2>
-    <p class="hint" style="margin-bottom:12px;">このアプリはブラウザを閉じると内容が消えます。作業の区切りで「保存」を、次回開いたときは「読み込み」を行ってください。写真も含めて1つのファイルにまとまります。</p>
-    <div class="grid2">
-      <button class="btn secondary" id="saveDataBtn">カルテを保存(JSON)</button>
-      <button class="btn secondary" id="loadDataBtn">カルテを読み込む(JSON)</button>
-    </div>
-    <input type="file" id="dataFileInput" accept=".json" style="display:none;">
-  </div>
+<p class="hint" id="saveStatus" style="text-align:right;margin:-10px 0 12px;"></p>
 
-  <div id="errorArea"></div>
+<div id="dataMenu" class="card hidden">
+<h2>データの保存・読み込み</h2>
+<p class="hint" style="margin-bottom:12px;">入力した内容は、この端末のブラウザに自動で保存されます。ただし、ブラウザのデータ消去・端末の故障や買い替え・iPhoneのSafariを長期間(目安7日)開かなかった場合などに消えることがあります。万一に備えて、定期的に「カルテを保存(JSON)」でバックアップを取ってください。写真も含めて1つのファイルにまとまります。<br>※「読み込み」を行うと、いま保存されているデータは読み込んだファイルの内容に置き換わります。</p>
+<div class="grid2">
+<button class="btn secondary" id="saveDataBtn">カルテを保存(JSON)</button>
+<button class="btn secondary" id="loadDataBtn">カルテを読み込む(JSON)</button>
+</div>
+<input type="file" id="dataFileInput" accept=".json,application/json" style="display:none;">
+</div>
 
-  <!-- ============ 一覧画面 ============ -->
-  <div id="listView">
-    <div class="card">
-      <div class="searchBar">
-        <input type="text" id="searchInput" placeholder="名前・ふりがなで検索">
-      </div>
-      <div class="indexRow" id="indexRow"></div>
-      <ul class="customerList" id="customerList"></ul>
-      <div id="listEmpty" class="empty hidden">まだお客様が登録されていません。右下の「＋」から追加してください。</div>
-    </div>
-  </div>
+<div id="errorArea"></div>
 
-  <!-- ============ お客様詳細(フォルダ) ============ -->
-  <div id="profileView" class="hidden">
-    <div class="backRow"><button id="backToList">← お客様一覧に戻る</button></div>
+<!-- ============ 一覧画面 ============ -->
+<div id="listView">
+<div class="card">
+<div class="searchBar">
+<input type="text" id="searchInput" placeholder="名前・ふりがなで検索">
+</div>
+<div class="indexRow" id="indexRow"></div>
+<ul class="customerList" id="customerList"></ul>
+<div id="listEmpty" class="empty hidden">まだお客様が登録されていません。右下の「＋」から追加してください。</div>
+</div>
+</div>
 
-    <div class="card">
-      <div class="profileHead">
-        <div>
-          <div class="profileName" id="profName"></div>
-          <div class="profileKana" id="profKana"></div>
-          <div class="profileRank" id="profRank"></div>
-        </div>
-        <button class="btn small ghost" id="editProfileBtn">名前を訂正</button>
-      </div>
-    </div>
+<!-- ============ お客様詳細(フォルダ) ============ -->
+<div id="profileView" class="hidden">
+<div class="backRow"><button id="backToList">← お客様一覧に戻る</button></div>
 
-    <div id="editProfileCard" class="card hidden">
-      <h2>お客様情報を編集</h2>
-      <label class="field"><span>お名前</span><input type="text" id="editName"></label>
-      <label class="field"><span>ふりがな(カナ)</span><input type="text" id="editKana" placeholder="例：タナカハナコ"></label>
-      <label class="field"><span>お客様ランク(任意)</span><input type="text" id="editRank" placeholder="例：VIP"></label>
-      <div class="grid2">
-        <button class="btn secondary" id="cancelEditProfile">キャンセル</button>
-        <button class="btn" id="saveEditProfile">保存</button>
-      </div>
-    </div>
+<div class="card">
+<div class="profileHead">
+<div>
+<div class="profileName" id="profName"></div>
+<div class="profileKana" id="profKana"></div>
+<div class="profileRank" id="profRank"></div>
+</div>
+<button class="btn small ghost" id="editProfileBtn">名前を訂正</button>
+</div>
+</div>
 
-    <h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-size:15px;margin:18px 0 10px;">来店記録</h2>
-    <div id="visitList"></div>
-    <div id="visitEmpty" class="empty hidden">まだ来店記録がありません。</div>
-    <button class="btn full" id="addVisitBtn">＋ 新しい来店記録を追加</button>
-  </div>
+<div id="editProfileCard" class="card hidden">
+<h2>お客様情報を編集</h2>
+<label class="field"><span>お名前</span><input type="text" id="editName"></label>
+<label class="field"><span>ふりがな(カナ)</span><input type="text" id="editKana" placeholder="例：タナカハナコ"></label>
+<label class="field"><span>お客様ランク(任意)</span><input type="text" id="editRank" placeholder="例：VIP"></label>
+<div class="grid2">
+<button class="btn secondary" id="cancelEditProfile">キャンセル</button>
+<button class="btn" id="saveEditProfile">保存</button>
+</div>
+</div>
 
-  <!-- ============ 来店記録 追加/編集 ============ -->
-  <div id="visitFormView" class="hidden">
-    <div class="backRow"><button id="backToProfile">← カルテに戻る</button></div>
-    <div class="card">
-      <h2 id="visitFormTitle">来店記録を追加</h2>
+<h2 style="font-family:'Zen Kaku Gothic New',sans-serif;font-size:15px;margin:18px 0 10px;">来店記録</h2>
+<div id="visitList"></div>
+<div id="visitEmpty" class="empty hidden">まだ来店記録がありません。</div>
+<button class="btn full" id="addVisitBtn">＋ 新しい来店記録を追加</button>
 
-      <label class="field"><span>来店日</span><input type="date" id="visitDate"></label>
+<div class="dangerZone">
+<button class="btn small dangerOutline" id="deleteCustomerBtn">このお客様を削除する</button>
+</div>
+</div>
 
-      <label class="field"><span>ネイルの写真</span></label>
-      <label class="photoPicker" id="photoPickerLabel">
-        <input type="file" id="photoInput" accept="image/*" multiple capture="environment">
-        <span>📷 タップして写真を追加(複数選択可)</span>
-      </label>
-      <div class="photoPreview" id="photoPreview"></div>
+<!-- ============ 来店記録 追加/編集 ============ -->
+<div id="visitFormView" class="hidden">
+<div class="backRow"><button id="backToProfile">← カルテに戻る</button></div>
+<div class="card">
+<h2 id="visitFormTitle">来店記録を追加</h2>
 
-      <label class="field"><span>使用ジェル・パーツ</span>
-        <input type="text" id="visitGel" placeholder="例：カラー：〇〇 / パーツ：△△">
-      </label>
+<label class="field"><span>来店日</span><input type="date" id="visitDate"></label>
 
-      <label class="field"><span>メモ(会話内容など)</span>
-        <div class="memoWrap">
-          <textarea id="visitMemo" placeholder="会話の内容やお客様の要望などを記入"></textarea>
-          <button class="micBtn hidden" id="micBtn" type="button">🎤</button>
-        </div>
-        <div class="hint">💡 キーボードのマイクボタンからも音声入力できます</div>
-      </label>
+<label class="field"><span>ネイルの写真</span></label>
+<label class="photoPicker" id="photoPickerLabel">
+<input type="file" id="photoInput" accept="image/*" multiple>
+<span>📷 タップして写真を追加(撮影・アルバムから選択・複数選択可)</span>
+</label>
+<div class="photoPreview" id="photoPreview"></div>
 
-      <div class="grid2" style="margin-top:16px;">
-        <button class="btn secondary" id="cancelVisit">キャンセル</button>
-        <button class="btn" id="saveVisitBtn">保存</button>
-      </div>
-    </div>
-  </div>
+<label class="field"><span>使用ジェル・パーツ</span>
+<input type="text" id="visitGel" placeholder="例：カラー：〇〇 / パーツ：△△">
+</label>
 
-  <!-- ============ 新規お客様 ============ -->
-  <div id="newCustomerView" class="hidden">
-    <div class="backRow"><button id="backFromNew">← 一覧に戻る</button></div>
-    <div class="card">
-      <h2>新しいお客様を登録</h2>
-      <label class="field"><span>お名前</span><input type="text" id="newName" placeholder="例：田中 花子"></label>
-      <label class="field"><span>ふりがな(カナ)</span><input type="text" id="newKana" placeholder="例：タナカハナコ"></label>
-      <label class="field"><span>お客様ランク(任意)</span><input type="text" id="newRank" placeholder="例：VIP"></label>
-      <button class="btn full" id="createCustomerBtn">登録する</button>
-    </div>
-  </div>
+<label class="field"><span>メモ(会話内容など)</span>
+<div class="memoWrap">
+<textarea id="visitMemo" placeholder="会話の内容やお客様の要望などを記入"></textarea>
+<button class="micBtn hidden" id="micBtn" type="button">🎤</button>
+</div>
+<div class="hint">💡 キーボードのマイクボタンからも音声入力できます</div>
+</label>
 
-  <footer>
-    データは端末内(このブラウザ)にのみ保存され、外部のサーバーやインターネットには一切送信されません。忘れずにJSONで保存してください。
-    <br><br>
-    本ツールの著作権は制作者に帰属します。ご購入いただいたご本人・ご自身のサロンでのご利用を目的としており、再配布・転売はご遠慮ください。
-  </footer>
+<div class="grid2" style="margin-top:16px;">
+<button class="btn secondary" id="cancelVisit">キャンセル</button>
+<button class="btn" id="saveVisitBtn">保存</button>
+</div>
+</div>
+</div>
+
+<!-- ============ 新規お客様 ============ -->
+<div id="newCustomerView" class="hidden">
+<div class="backRow"><button id="backFromNew">← 一覧に戻る</button></div>
+<div class="card">
+<h2>新しいお客様を登録</h2>
+<label class="field"><span>お名前</span><input type="text" id="newName" placeholder="例：田中 花子"></label>
+<label class="field"><span>ふりがな(カナ)</span><input type="text" id="newKana" placeholder="例：タナカハナコ"></label>
+<label class="field"><span>お客様ランク(任意)</span><input type="text" id="newRank" placeholder="例：VIP"></label>
+<button class="btn full" id="createCustomerBtn">登録する</button>
+</div>
+</div>
+
+<footer>
+お客様のデータは、この端末のブラウザ内でのみ扱われ、外部のサーバーには送信されません(文字フォントの読み込みのみ外部と通信します)。自動保存のほか、定期的にJSONでバックアップを取ってください。共用の端末では使わないでください。
+<br><br>
+本ツールの著作権は制作者に帰属します。ご購入いただいたご本人・ご自身のサロンでのご利用を目的としており、再配布・転売はご遠慮ください。
+</footer>
 </div>
 
 <div class="fab hidden" id="fabAdd">
-  <button class="btn icon" id="fabAddBtn">＋</button>
+<button class="btn icon" id="fabAddBtn">＋</button>
+</div>
+
+<!-- 確認ダイアログ(window.confirmはアプリ内ブラウザで動かないことがあるため自前で用意) -->
+<div class="modalBack hidden" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+<div class="modalBox">
+<h2 id="modalTitle"></h2>
+<p id="modalBody"></p>
+<button class="btn secondary full extra hidden" id="modalExtra"></button>
+<div class="grid2">
+<button class="btn secondary" id="modalCancel">キャンセル</button>
+<button class="btn danger" id="modalOk">削除する</button>
+</div>
+</div>
 </div>
 
 <script>
 // ---------- state ----------
 let customers = []; // {id, name, kana, rank}
-let visits = [];    // {id, customerId, date, photos:[dataURL], gel, memo}
+let visits = []; // {id, customerId, date, photos:[dataURL], gel, memo}
 let idCounter = 1;
 let currentCustomerId = null;
 let editingVisitId = null;
 let pendingPhotos = [];
+let dirty = false; // 保存していない変更があるか
 
 const $ = (id)=>document.getElementById(id);
 
-function showError(msg){ $('errorArea').innerHTML = `<div class="msg warn">${msg}</div>`; }
+// ---------- helpers ----------
+function esc(s){
+return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function safeImg(p){
+return typeof p==='string' && p.startsWith('data:image/') && !/["'<>\s]/.test(p);
+}
+function todayStr(){
+const d = new Date();
+const p = n=>String(n).padStart(2,'0');
+return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; // 端末のローカル日付(日本時間)
+}
+
+// ---------- 自動保存(IndexedDB。写真が多くても保存できるよう localStorage は使わない) ----------
+const DB_NAME = 'CustomerCardDB', DB_STORE = 'kv', DB_KEY = 'state';
+let dbPromise = null;
+let autosaveTimer = null;
+let autosaveWorks = true;
+
+function openDB(){
+if(!dbPromise){
+dbPromise = new Promise((resolve, reject)=>{
+try{
+const req = indexedDB.open(DB_NAME, 1);
+req.onupgradeneeded = ()=> req.result.createObjectStore(DB_STORE);
+req.onsuccess = ()=> resolve(req.result);
+req.onerror = ()=> reject(req.error || new Error('open failed'));
+req.onblocked = ()=> reject(new Error('blocked'));
+}catch(err){ reject(err); }
+});
+}
+return dbPromise;
+}
+function dbPut(value){
+return openDB().then(db=> new Promise((resolve, reject)=>{
+const tx = db.transaction(DB_STORE, 'readwrite');
+tx.objectStore(DB_STORE).put(value, DB_KEY);
+tx.oncomplete = ()=> resolve();
+tx.onerror = ()=> reject(tx.error || new Error('write failed'));
+tx.onabort = ()=> reject(tx.error || new Error('write aborted'));
+}));
+}
+function dbGet(){
+return openDB().then(db=> new Promise((resolve, reject)=>{
+const req = db.transaction(DB_STORE, 'readonly').objectStore(DB_STORE).get(DB_KEY);
+req.onsuccess = ()=> resolve(req.result);
+req.onerror = ()=> reject(req.error || new Error('read failed'));
+}));
+}
+function setSaveStatus(text, bad){
+const el = $('saveStatus');
+el.textContent = text;
+el.style.color = bad ? 'var(--warn)' : '';
+}
+function timeLabel(){
+const d = new Date(); const p = n=>String(n).padStart(2,'0');
+return `${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+function flushAutosave(){
+clearTimeout(autosaveTimer); autosaveTimer = null;
+const snapshot = {customers, visits, idCounter, savedAt:new Date().toISOString()};
+return dbPut(snapshot).then(()=>{
+autosaveWorks = true; dirty = false;
+setSaveStatus(`✓ 自動保存しました(${timeLabel()})`);
+}).catch(()=>{
+autosaveWorks = false;
+setSaveStatus('⚠ 自動保存できません。「データ」→「カルテを保存(JSON)」で保存してください', true);
+});
+}
+function scheduleAutosave(){
+clearTimeout(autosaveTimer);
+autosaveTimer = setTimeout(flushAutosave, 400);
+}
+// 画面を閉じる・アプリを切り替える直前にも、保存待ちの変更があれば書き込む
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='hidden' && autosaveTimer) flushAutosave(); });
+window.addEventListener('pagehide', ()=>{ if(autosaveTimer) flushAutosave(); });
+
+// 変更があるたびに呼ぶ(自動保存を予約する)
+function markDirty(){ dirty = true; scheduleAutosave(); }
+
+function showError(msg){ $('errorArea').innerHTML = `<div class="msg warn">${esc(msg)}</div>`; }
+function showOk(msg){ $('errorArea').innerHTML = `<div class="msg ok">${esc(msg)}</div>`; }
 function clearError(){ $('errorArea').innerHTML = ''; }
+
+// 保存せずに閉じようとしたときの警告
+window.addEventListener('beforeunload', (e)=>{
+if(dirty && (customers.length || visits.length)){ e.preventDefault(); e.returnValue=''; }
+});
+
+// ---------- confirm dialog ----------
+let modalOkHandler = null;
+let modalExtraHandler = null;
+function openConfirm({title, body, okLabel, extraLabel, onExtra, onOk}){
+$('modalTitle').textContent = title;
+$('modalBody').textContent = body;
+$('modalOk').textContent = okLabel || 'OK';
+modalOkHandler = onOk;
+modalExtraHandler = onExtra || null;
+$('modalExtra').textContent = extraLabel || '';
+$('modalExtra').classList.toggle('hidden', !extraLabel);
+$('modal').classList.remove('hidden');
+}
+function closeConfirm(){
+$('modal').classList.add('hidden');
+modalOkHandler = null; modalExtraHandler = null;
+}
+$('modalCancel').addEventListener('click', closeConfirm);
+$('modalOk').addEventListener('click', ()=>{
+const fn = modalOkHandler;
+closeConfirm();
+if(fn) fn();
+});
+$('modalExtra').addEventListener('click', ()=>{ if(modalExtraHandler) modalExtraHandler(); });
 
 // ---------- view switching ----------
 function showView(name){
-  ['listView','profileView','visitFormView','newCustomerView'].forEach(v=>{
-    $(v).classList.toggle('hidden', v!==name);
-  });
-  $('fabAdd').classList.toggle('hidden', name!=='listView');
-  $('dataMenu').classList.add('hidden');
-  $('pageTitle').textContent = name==='listView' ? 'Customer Card'
-    : name==='profileView' ? 'Customer Card'
-    : name==='visitFormView' ? '来店記録'
-    : '新規登録';
-  clearError();
+['listView','profileView','visitFormView','newCustomerView'].forEach(v=>{
+$(v).classList.toggle('hidden', v!==name);
+});
+$('fabAdd').classList.toggle('hidden', name!=='listView');
+$('dataMenu').classList.add('hidden');
+$('pageTitle').textContent = name==='listView' ? 'Customer Card'
+: name==='profileView' ? 'Customer Card'
+: name==='visitFormView' ? '来店記録'
+: '新規登録';
+clearError();
+window.scrollTo(0,0);
 }
 
 // ---------- 50音 index ----------
 const KANA_GROUPS = {
-  'あ':'アイウエオ','か':'カキクケコガギグゲゴ','さ':'サシスセソザジズゼゾ',
-  'た':'タチツテトダヂヅデド','な':'ナニヌネノ','は':'ハヒフヘホバビブベボパピプペポ',
-  'ま':'マミムメモ','や':'ヤユヨ','ら':'ラリルレロ','わ':'ワヲン'
+'あ':'アイウエオァィゥェォヴ','か':'カキクケコガギグゲゴ','さ':'サシスセソザジズゼゾ',
+'た':'タチツテトダヂヅデドッ','な':'ナニヌネノ','は':'ハヒフヘホバビブベボパピプペポ',
+'ま':'マミムメモ','や':'ヤユヨャュョ','ら':'ラリルレロ','わ':'ワヲンヮ'
 };
 function toKatakana(s){
-  return (s||'').replace(/[\u3041-\u3096]/g, ch => String.fromCharCode(ch.charCodeAt(0)+0x60));
+return (s||'').replace(/[ぁ-ゖ]/g, ch => String.fromCharCode(ch.charCodeAt(0)+0x60));
 }
 function kanaGroupOf(kana){
-  const k = toKatakana(kana).charAt(0);
-  for(const g in KANA_GROUPS){ if(KANA_GROUPS[g].includes(k)) return g; }
-  return '他';
+const k = toKatakana(kana).charAt(0);
+if(!k) return '他'; // ふりがな未入力('' は includes で全グループに一致してしまうため先に除外)
+for(const g in KANA_GROUPS){ if(KANA_GROUPS[g].includes(k)) return g; }
+return '他';
 }
 
 let activeIndex = null;
 function renderIndexRow(){
-  const groups = ['あ','か','さ','た','な','は','ま','や','ら','わ'];
-  $('indexRow').innerHTML = groups.map(g=>`<button data-g="${g}" class="${activeIndex===g?'active':''}">${g}</button>`).join('')
-    + `<button data-g="all" class="${activeIndex===null?'active':''}">すべて</button>`;
-  $('indexRow').querySelectorAll('button').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      activeIndex = btn.dataset.g==='all' ? null : btn.dataset.g;
-      renderIndexRow();
-      renderCustomerList();
-    });
-  });
+const groups = ['あ','か','さ','た','な','は','ま','や','ら','わ','他'];
+$('indexRow').innerHTML = groups.map(g=>`<button data-g="${g}" class="${activeIndex===g?'active':''}">${g}</button>`).join('')
++ `<button data-g="all" class="${activeIndex===null?'active':''}">すべて</button>`;
+$('indexRow').querySelectorAll('button').forEach(btn=>{
+btn.addEventListener('click', ()=>{
+activeIndex = btn.dataset.g==='all' ? null : btn.dataset.g;
+renderIndexRow();
+renderCustomerList();
+});
+});
 }
 
 // ---------- customer list ----------
 function renderCustomerList(){
-  const q = $('searchInput').value.trim();
-  const qKana = toKatakana(q);
-  let list = [...customers];
-  if(activeIndex) list = list.filter(c=> kanaGroupOf(c.kana)===activeIndex);
-  if(q) list = list.filter(c=> c.name.includes(q) || toKatakana(c.kana).includes(qKana));
-  list.sort((a,b)=> toKatakana(a.kana).localeCompare(toKatakana(b.kana), 'ja'));
+const q = $('searchInput').value.trim();
+const qKana = toKatakana(q);
+let list = [...customers];
+if(activeIndex) list = list.filter(c=> kanaGroupOf(c.kana)===activeIndex);
+if(q) list = list.filter(c=> c.name.includes(q) || toKatakana(c.kana).includes(qKana));
+list.sort((a,b)=> toKatakana(a.kana).localeCompare(toKatakana(b.kana), 'ja'));
 
-  $('customerList').innerHTML = list.map(c=>{
-    const cnt = visits.filter(v=>v.customerId===c.id).length;
-    return `<li data-id="${c.id}">
-      <div><div class="name">${c.name}</div><div class="kana">${c.kana||''}</div></div>
-      <div style="display:flex;align-items:center;">
-        ${c.rank?`<span class="rank">${c.rank}</span>`:''}
-        <span class="cnt">${cnt}件</span>
-      </div>
-    </li>`;
-  }).join('');
-  $('listEmpty').classList.toggle('hidden', list.length>0);
+$('customerList').innerHTML = list.map(c=>{
+const cnt = visits.filter(v=>v.customerId===c.id).length;
+return `<li data-id="${c.id}">
+<div><div class="name">${esc(c.name)}</div><div class="kana">${esc(c.kana||'')}</div></div>
+<div style="display:flex;align-items:center;">
+${c.rank?`<span class="rank">${esc(c.rank)}</span>`:''}
+<span class="cnt">${cnt}件</span>
+</div>
+</li>`;
+}).join('');
+$('listEmpty').classList.toggle('hidden', list.length>0);
+$('listEmpty').textContent = customers.length===0
+? 'まだお客様が登録されていません。右下の「＋」から追加してください。'
+: '該当するお客様が見つかりません。';
 
-  $('customerList').querySelectorAll('li').forEach(li=>{
-    li.addEventListener('click', ()=> openProfile(parseInt(li.dataset.id,10)) );
-  });
+$('customerList').querySelectorAll('li').forEach(li=>{
+li.addEventListener('click', ()=> openProfile(parseInt(li.dataset.id,10)) );
+});
 }
 $('searchInput').addEventListener('input', renderCustomerList);
 
 // ---------- profile (customer folder) ----------
 function openProfile(id){
-  currentCustomerId = id;
-  const c = customers.find(c=>c.id===id);
-  if(!c) return;
-  $('profName').textContent = c.name;
-  $('profKana').textContent = c.kana||'';
-  $('profRank').textContent = c.rank||'';
-  $('profRank').classList.toggle('hidden', !c.rank);
-  $('editProfileCard').classList.add('hidden');
-  renderVisitList();
-  showView('profileView');
+currentCustomerId = id;
+const c = customers.find(c=>c.id===id);
+if(!c) return;
+$('profName').textContent = c.name;
+$('profKana').textContent = c.kana||'';
+$('profRank').textContent = c.rank||'';
+$('profRank').classList.toggle('hidden', !c.rank);
+$('editProfileCard').classList.add('hidden');
+renderVisitList();
+showView('profileView');
 }
 
 $('editProfileBtn').addEventListener('click', ()=>{
-  const c = customers.find(c=>c.id===currentCustomerId);
-  $('editName').value = c.name;
-  $('editKana').value = c.kana||'';
-  $('editRank').value = c.rank||'';
-  $('editProfileCard').classList.remove('hidden');
+const c = customers.find(c=>c.id===currentCustomerId);
+$('editName').value = c.name;
+$('editKana').value = c.kana||'';
+$('editRank').value = c.rank||'';
+$('editProfileCard').classList.remove('hidden');
 });
 $('cancelEditProfile').addEventListener('click', ()=> $('editProfileCard').classList.add('hidden') );
 $('saveEditProfile').addEventListener('click', ()=>{
-  const name = $('editName').value.trim();
-  if(!name){ showError('お名前を入力してください。'); return; }
-  clearError();
-  const c = customers.find(c=>c.id===currentCustomerId);
-  c.name = name; c.kana = $('editKana').value.trim(); c.rank = $('editRank').value.trim();
-  $('editProfileCard').classList.add('hidden');
-  openProfile(currentCustomerId);
+const name = $('editName').value.trim();
+if(!name){ showError('お名前を入力してください。'); return; }
+clearError();
+const c = customers.find(c=>c.id===currentCustomerId);
+c.name = name; c.kana = $('editKana').value.trim(); c.rank = $('editRank').value.trim();
+markDirty();
+$('editProfileCard').classList.add('hidden');
+openProfile(currentCustomerId);
 });
 
-function renderVisitList(){
-  const list = visits.filter(v=>v.customerId===currentCustomerId).sort((a,b)=> b.date.localeCompare(a.date));
-  $('visitList').innerHTML = list.map(v=>`
-    <div class="visitCard">
-      <div class="visitDate">${v.date}</div>
-      ${v.photos && v.photos.length ? `<div class="photoRow">${v.photos.map(p=>`<img src="${p}">`).join('')}</div>` : ''}
-      ${v.gel ? `<div class="visitField"><b>使用ジェル・パーツ</b>${v.gel}</div>` : ''}
-      ${v.memo ? `<div class="visitField"><b>メモ</b>${v.memo.replace(/\n/g,'<br>')}</div>` : ''}
-      <div class="visitActions">
-        <button class="btn small ghost" data-edit="${v.id}">編集</button>
-        <button class="btn small ghost" data-del="${v.id}">削除</button>
-      </div>
-    </div>
-  `).join('');
-  $('visitEmpty').classList.toggle('hidden', list.length>0);
+// ---------- お客様の削除 ----------
+$('deleteCustomerBtn').addEventListener('click', ()=>{
+const c = customers.find(c=>c.id===currentCustomerId);
+if(!c) return;
+const cnt = visits.filter(v=>v.customerId===c.id).length;
+openConfirm({
+title: 'このお客様を削除しますか?',
+body: `「${c.name}」さんのカルテと、来店記録${cnt}件(写真・メモを含む)をすべて削除します。\n\nこの操作は元に戻せません。\n不安な場合は、先にバックアップを保存してください。`,
+okLabel: '削除する',
+extraLabel: '先にバックアップを保存する(JSON)',
+onExtra: saveDataFile,
+onOk: ()=> deleteCustomer(c.id)
+});
+});
 
-  $('visitList').querySelectorAll('[data-edit]').forEach(b=> b.addEventListener('click', ()=> openVisitForm(parseInt(b.dataset.edit,10)) ));
-  $('visitList').querySelectorAll('[data-del]').forEach(b=> b.addEventListener('click', ()=>{
-    visits = visits.filter(v=>v.id!==parseInt(b.dataset.del,10));
-    renderVisitList();
-    renderCustomerList();
-  }));
+function deleteCustomer(id){
+customers = customers.filter(c=>c.id!==id);
+visits = visits.filter(v=>v.customerId!==id);
+currentCustomerId = null;
+editingVisitId = null;
+pendingPhotos = [];
+markDirty();
+renderCustomerList();
+showView('listView');
+showOk('お客様を削除しました。');
+}
+
+function renderVisitList(){
+const list = visits.filter(v=>v.customerId===currentCustomerId).sort((a,b)=> b.date.localeCompare(a.date) || b.id-a.id);
+$('visitList').innerHTML = list.map(v=>`
+<div class="visitCard">
+<div class="visitDate">${esc(v.date)}</div>
+${v.photos && v.photos.length ? `<div class="photoRow">${v.photos.filter(safeImg).map(p=>`<img src="${esc(p)}" alt="ネイル写真">`).join('')}</div>` : ''}
+${v.gel ? `<div class="visitField"><b>使用ジェル・パーツ</b>${esc(v.gel)}</div>` : ''}
+${v.memo ? `<div class="visitField"><b>メモ</b>${esc(v.memo).replace(/\n/g,'<br>')}</div>` : ''}
+<div class="visitActions">
+<button class="btn small ghost" data-edit="${v.id}">編集</button>
+<button class="btn small ghost" data-del="${v.id}">削除</button>
+</div>
+</div>
+`).join('');
+$('visitEmpty').classList.toggle('hidden', list.length>0);
+
+$('visitList').querySelectorAll('[data-edit]').forEach(b=> b.addEventListener('click', ()=> openVisitForm(parseInt(b.dataset.edit,10)) ));
+$('visitList').querySelectorAll('[data-del]').forEach(b=> b.addEventListener('click', ()=>{
+const vid = parseInt(b.dataset.del,10);
+const v = visits.find(v=>v.id===vid);
+if(!v) return;
+openConfirm({
+title: 'この来店記録を削除しますか?',
+body: `${v.date} の来店記録(写真・メモを含む)を削除します。\nこの操作は元に戻せません。`,
+okLabel: '削除する',
+onOk: ()=>{
+visits = visits.filter(x=>x.id!==vid);
+markDirty();
+renderVisitList();
+renderCustomerList();
+}
+});
+}));
 }
 
 $('backToList').addEventListener('click', ()=>{ currentCustomerId=null; renderCustomerList(); showView('listView'); });
 
 // ---------- visit form ----------
 function openVisitForm(visitId){
-  editingVisitId = visitId || null;
-  pendingPhotos = [];
-  if(editingVisitId){
-    const v = visits.find(v=>v.id===editingVisitId);
-    $('visitFormTitle').textContent = '来店記録を編集';
-    $('visitDate').value = v.date;
-    $('visitGel').value = v.gel||'';
-    $('visitMemo').value = v.memo||'';
-    pendingPhotos = [...(v.photos||[])];
-  } else {
-    $('visitFormTitle').textContent = '来店記録を追加';
-    $('visitDate').value = new Date().toISOString().slice(0,10);
-    $('visitGel').value = '';
-    $('visitMemo').value = '';
-  }
-  renderPhotoPreview();
-  showView('visitFormView');
+editingVisitId = visitId || null;
+pendingPhotos = [];
+if(editingVisitId){
+const v = visits.find(v=>v.id===editingVisitId);
+$('visitFormTitle').textContent = '来店記録を編集';
+$('visitDate').value = v.date;
+$('visitGel').value = v.gel||'';
+$('visitMemo').value = v.memo||'';
+pendingPhotos = [...(v.photos||[])];
+} else {
+$('visitFormTitle').textContent = '来店記録を追加';
+$('visitDate').value = todayStr();
+$('visitGel').value = '';
+$('visitMemo').value = '';
+}
+renderPhotoPreview();
+showView('visitFormView');
 }
 $('addVisitBtn').addEventListener('click', ()=> openVisitForm(null) );
 $('backToProfile').addEventListener('click', ()=> openProfile(currentCustomerId) );
 $('cancelVisit').addEventListener('click', ()=> openProfile(currentCustomerId) );
 
 function renderPhotoPreview(){
-  $('photoPreview').innerHTML = pendingPhotos.map((p,i)=>`
-    <div class="ph"><img src="${p}"><button class="rm" data-i="${i}">×</button></div>
-  `).join('');
-  $('photoPreview').querySelectorAll('.rm').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      pendingPhotos.splice(parseInt(btn.dataset.i,10),1);
-      renderPhotoPreview();
-    });
-  });
+$('photoPreview').innerHTML = pendingPhotos.map((p,i)=>`
+<div class="ph"><img src="${esc(p)}" alt="ネイル写真"><button class="rm" data-i="${i}" aria-label="写真を外す">×</button></div>
+`).join('');
+$('photoPreview').querySelectorAll('.rm').forEach(btn=>{
+btn.addEventListener('click', ()=>{
+pendingPhotos.splice(parseInt(btn.dataset.i,10),1);
+renderPhotoPreview();
+});
+});
 }
 
+// 読み込めない画像(非対応形式など)は null を返す
 function resizeImage(file){
-  return new Promise((resolve)=>{
-    const reader = new FileReader();
-    reader.onload = (e)=>{
-      const img = new Image();
-      img.onload = ()=>{
-        const maxW = 900;
-        const scale = Math.min(1, maxW/img.width);
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width*scale;
-        canvas.height = img.height*scale;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img,0,0,canvas.width,canvas.height);
-        resolve(canvas.toDataURL('image/jpeg', 0.75));
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
+return new Promise((resolve)=>{
+const reader = new FileReader();
+reader.onerror = ()=> resolve(null);
+reader.onload = (e)=>{
+const img = new Image();
+img.onerror = ()=> resolve(null);
+img.onload = ()=>{
+try{
+const maxW = 900;
+const scale = Math.min(1, maxW/img.width);
+const canvas = document.createElement('canvas');
+canvas.width = Math.max(1, Math.round(img.width*scale));
+canvas.height = Math.max(1, Math.round(img.height*scale));
+const ctx = canvas.getContext('2d');
+ctx.drawImage(img,0,0,canvas.width,canvas.height);
+resolve(canvas.toDataURL('image/jpeg', 0.75));
+}catch(err){ resolve(null); }
+};
+img.src = e.target.result;
+};
+reader.readAsDataURL(file);
+});
 }
 
 $('photoInput').addEventListener('change', async (e)=>{
-  const files = Array.from(e.target.files);
-  for(const f of files){
-    const dataUrl = await resizeImage(f);
-    pendingPhotos.push(dataUrl);
-  }
-  renderPhotoPreview();
-  e.target.value = '';
+const files = Array.from(e.target.files);
+let failed = 0;
+for(const f of files){
+const dataUrl = await resizeImage(f);
+if(dataUrl) pendingPhotos.push(dataUrl); else failed++;
+}
+renderPhotoPreview();
+e.target.value = '';
+if(failed) showError(`${failed}枚の写真を読み込めませんでした。JPEG・PNG形式の写真をお試しください。`);
+else clearError();
 });
 
 $('saveVisitBtn').addEventListener('click', ()=>{
-  const date = $('visitDate').value;
-  if(!date){ showError('来店日を入力してください。'); return; }
-  clearError();
-  if(editingVisitId){
-    const v = visits.find(v=>v.id===editingVisitId);
-    v.date = date; v.gel = $('visitGel').value.trim(); v.memo = $('visitMemo').value.trim();
-    v.photos = [...pendingPhotos];
-  } else {
-    visits.push({
-      id: idCounter++, customerId: currentCustomerId, date,
-      gel: $('visitGel').value.trim(), memo: $('visitMemo').value.trim(),
-      photos: [...pendingPhotos]
-    });
-  }
-  openProfile(currentCustomerId);
+const date = $('visitDate').value;
+if(!date){ showError('来店日を入力してください。'); return; }
+clearError();
+if(editingVisitId){
+const v = visits.find(v=>v.id===editingVisitId);
+v.date = date; v.gel = $('visitGel').value.trim(); v.memo = $('visitMemo').value.trim();
+v.photos = [...pendingPhotos];
+} else {
+visits.push({
+id: idCounter++, customerId: currentCustomerId, date,
+gel: $('visitGel').value.trim(), memo: $('visitMemo').value.trim(),
+photos: [...pendingPhotos]
+});
+}
+markDirty();
+openProfile(currentCustomerId);
 });
 
 // optional: webkitSpeechRecognition button (feature-detected; falls back silently)
 (function setupMic(){
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR) return; // not supported here — keyboard dictation still works
-  const micBtn = $('micBtn');
-  micBtn.classList.remove('hidden');
-  const rec = new SR();
-  rec.lang = 'ja-JP';
-  rec.continuous = true;
-  rec.interimResults = false;
-  let listening = false;
-  rec.onresult = (e)=>{
-    let text='';
-    for(let i=e.resultIndex;i<e.results.length;i++) text += e.results[i][0].transcript;
-    const ta = $('visitMemo');
-    ta.value = ta.value + (ta.value && !ta.value.endsWith('\n') ? '\n' : '') + text;
-  };
-  rec.onend = ()=>{ listening=false; micBtn.classList.remove('listening'); };
-  micBtn.addEventListener('click', ()=>{
-    if(listening){ rec.stop(); listening=false; micBtn.classList.remove('listening'); }
-    else{ rec.start(); listening=true; micBtn.classList.add('listening'); }
-  });
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+if(!SR) return; // not supported here — keyboard dictation still works
+const micBtn = $('micBtn');
+micBtn.classList.remove('hidden');
+const rec = new SR();
+rec.lang = 'ja-JP';
+rec.continuous = true;
+rec.interimResults = false;
+let listening = false;
+function stopUi(){ listening=false; micBtn.classList.remove('listening'); }
+rec.onresult = (e)=>{
+let text='';
+for(let i=e.resultIndex;i<e.results.length;i++) text += e.results[i][0].transcript;
+const ta = $('visitMemo');
+ta.value = ta.value + (ta.value && !ta.value.endsWith('\n') ? '\n' : '') + text;
+};
+rec.onend = stopUi;
+rec.onerror = (e)=>{
+stopUi();
+if(e && (e.error==='not-allowed' || e.error==='service-not-allowed')){
+showError('マイクが許可されていないため音声入力を使えません。ブラウザの設定でマイクを許可するか、キーボードのマイクボタンをお使いください。');
+}
+};
+micBtn.addEventListener('click', ()=>{
+try{
+if(listening){ rec.stop(); stopUi(); }
+else{ rec.start(); listening=true; micBtn.classList.add('listening'); }
+}catch(err){ stopUi(); }
+});
 })();
 
 // ---------- new customer ----------
 $('fabAddBtn').addEventListener('click', ()=>{
-  $('newName').value=''; $('newKana').value=''; $('newRank').value='';
-  showView('newCustomerView');
+$('newName').value=''; $('newKana').value=''; $('newRank').value='';
+showView('newCustomerView');
 });
 $('backFromNew').addEventListener('click', ()=>{ renderCustomerList(); showView('listView'); });
 $('createCustomerBtn').addEventListener('click', ()=>{
-  const name = $('newName').value.trim();
-  const kana = $('newKana').value.trim();
-  if(!name){ showError('お名前を入力してください。'); return; }
-  clearError();
-  const id = idCounter++;
-  customers.push({id, name, kana, rank: $('newRank').value.trim()});
-  renderCustomerList();
-  openProfile(id);
+const name = $('newName').value.trim();
+const kana = $('newKana').value.trim();
+if(!name){ showError('お名前を入力してください。'); return; }
+clearError();
+const id = idCounter++;
+customers.push({id, name, kana, rank: $('newRank').value.trim()});
+markDirty();
+renderCustomerList();
+openProfile(id);
 });
 
 // ---------- data save/load ----------
 $('dataMenuBtn').addEventListener('click', ()=> $('dataMenu').classList.toggle('hidden') );
+
+function saveDataFile(){
+const payload = {customers, visits, idCounter, savedAt:new Date().toISOString()};
+const blob = new Blob([JSON.stringify(payload)], {type:'application/json'});
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href=url; a.download = `CustomerCard_${todayStr()}.json`;
+document.body.appendChild(a); a.click(); document.body.removeChild(a);
+setTimeout(()=>URL.revokeObjectURL(url), 1000);
+dirty = false;
+}
 $('saveDataBtn').addEventListener('click', ()=>{
-  const payload = {customers, visits, idCounter, savedAt:new Date().toISOString()};
-  const blob = new Blob([JSON.stringify(payload)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href=url; a.download = `CustomerCard_${new Date().toISOString().slice(0,10)}.json`;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+saveDataFile();
+showOk('保存しました。ダウンロードされたJSONファイルを大切に保管してください。');
 });
+
+// 読み込んだデータの検査・整形(壊れたデータや不正なデータを取り除く)
+function sanitizeData(data){
+if(!data || !Array.isArray(data.customers) || !Array.isArray(data.visits)) throw new Error('invalid');
+const str = (x)=> typeof x==='string' ? x : '';
+const cs = [], seenC = new Set();
+data.customers.forEach(c=>{
+if(c && Number.isInteger(c.id) && typeof c.name==='string' && !seenC.has(c.id)){
+seenC.add(c.id);
+cs.push({id:c.id, name:c.name, kana:str(c.kana), rank:str(c.rank)});
+}
+});
+const vs = [], seenV = new Set();
+data.visits.forEach(v=>{
+if(v && Number.isInteger(v.id) && seenC.has(v.customerId) && !seenV.has(v.id) && typeof v.date==='string'){
+seenV.add(v.id);
+vs.push({id:v.id, customerId:v.customerId, date:v.date, gel:str(v.gel), memo:str(v.memo),
+photos: Array.isArray(v.photos) ? v.photos.filter(safeImg) : []});
+}
+});
+let maxId = 0;
+cs.forEach(c=>{ maxId = Math.max(maxId, c.id); });
+vs.forEach(v=>{ maxId = Math.max(maxId, v.id); });
+const counter = Math.max(maxId+1, Number.isInteger(data.idCounter) ? data.idCounter : 1);
+const dropped = (data.customers.length - cs.length) + (data.visits.length - vs.length);
+return {customers:cs, visits:vs, idCounter:counter, dropped};
+}
+
+function applyLoadedData(clean){
+customers = clean.customers;
+visits = clean.visits;
+idCounter = clean.idCounter;
+currentCustomerId = null; editingVisitId = null; pendingPhotos = [];
+activeIndex = null; $('searchInput').value = '';
+markDirty(); // 読み込んだ内容も自動保存の対象にする
+renderIndexRow();
+renderCustomerList();
+showView('listView');
+if(clean.dropped>0) showError(`読み込みました。ただし、壊れていた項目が${clean.dropped}件あり、除外しました。`);
+else showOk(`読み込みました(お客様${customers.length}名・来店記録${visits.length}件)。`);
+}
+
 $('loadDataBtn').addEventListener('click', ()=> $('dataFileInput').click() );
 $('dataFileInput').addEventListener('change', async (e)=>{
-  const file = e.target.files[0];
-  if(!file) return;
-  try{
-    const data = JSON.parse(await file.text());
-    if(!Array.isArray(data.customers) || !Array.isArray(data.visits)) throw new Error('invalid');
-    const existingCust = new Set(customers.map(c=>c.id));
-    data.customers.forEach(c=>{ if(!existingCust.has(c.id)) customers.push(c); });
-    const existingVisit = new Set(visits.map(v=>v.id));
-    data.visits.forEach(v=>{ if(!existingVisit.has(v.id)) visits.push(v); });
-    idCounter = Math.max(idCounter, data.idCounter||1);
-    renderCustomerList();
-    $('dataMenu').classList.add('hidden');
-  } catch(err){
-    showError('データの読み込みに失敗しました。このアプリで保存したJSONファイルを選んでください。');
-  }
+const file = e.target.files[0];
+e.target.value = ''; // 同じファイルをもう一度選べるようにする
+if(!file) return;
+let clean;
+try{
+clean = sanitizeData(JSON.parse(await file.text()));
+} catch(err){
+showError('データの読み込みに失敗しました。このアプリで保存したJSONファイルを選んでください。');
+return;
+}
+if(customers.length || visits.length){
+openConfirm({
+title: '読み込んだ内容に置き換えますか?',
+body: `いま保存されているデータ(お客様${customers.length}名)は、読み込むファイルの内容(お客様${clean.customers.length}名)に置き換わります。\n必要な場合は、先にいまのデータをJSONで保存してください。`,
+okLabel: '置き換える',
+extraLabel: '先にいまのデータを保存する(JSON)',
+onExtra: saveDataFile,
+onOk: ()=> applyLoadedData(clean)
+});
+} else {
+applyLoadedData(clean);
+}
 });
 
 // ---------- init ----------
 renderIndexRow();
 renderCustomerList();
 showView('listView');
+
+// 前回の自動保存データを復元する
+(async function restoreAutosave(){
+try{
+const saved = await dbGet();
+if(saved && !customers.length && !visits.length){
+const clean = sanitizeData(saved);
+customers = clean.customers; visits = clean.visits; idCounter = clean.idCounter;
+renderCustomerList();
+setSaveStatus(`前回のデータを復元しました(お客様${customers.length}名)`);
+} else {
+setSaveStatus('入力内容は自動で保存されます');
+}
+// ブラウザに「容量不足でも消さないで」とお願いする(許可されない場合もあります)
+if(navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{});
+}catch(err){
+autosaveWorks = false;
+setSaveStatus('⚠ この環境では自動保存が使えません。「データ」→「カルテを保存(JSON)」で保存してください', true);
+}
+})();
 </script>
 </body>
 </html>
